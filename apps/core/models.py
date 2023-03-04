@@ -17,11 +17,44 @@ class Configuracoes(models.Model):
 
 class Pessoa(models.Model):
     """
-    Classe que serve de base para outras classes
+    Classe abstrata que representa uma pessoa, que pode ser um jogador ou goleiro.
+    Possui os seguintes atributos:
+
+    Atributos:
+        nome (str): Nome completo da pessoa.
+        telefone (str, opcional): Número de telefone da pessoa.
+        pix (str, opcional): Chave Pix da pessoa.
+
     """
-    nome = models.CharField(max_length=100)
-    telefone = models.CharField(max_length=15,null=True)
-    pix = models.CharField(max_length=100,null=True)
+    nome = models.CharField(max_length=100,verbose_name='Nome')
+    telefone = models.CharField(max_length=15,null=True,verbose_name='Telefone')
+    pix = models.CharField(max_length=100,null=True,verbose_name='Chave Pix')
 
     class Meta:
         abstract = True
+
+class Jogador(Pessoa):
+    """
+    Representa um jogador, que é um integrante da pelada que joga na linha. 
+    Herda da classe Pessoa e adiciona um campo para o tipo de jogador (avulso ou mensalista).
+    Possui os seguintes atributos:
+
+    Atributos:
+        nome (str): Nome do jogador.
+        telefone (str, opcional): Telefone do jogador.
+        pix (str, opcional): Chave Pix do jogador.
+        tipo (int): Tipo de jogador, que pode ser 1 (avulso) ou 2 (mensalista).
+
+    """
+
+    AVULSO = 1
+    MENSALISTA = 2
+    TIPOS_PESSOA_CHOICES = (
+        (AVULSO, 'Avulso'),
+        (MENSALISTA, 'Mensalista'),
+    )
+
+    tipo = models.IntegerField(default=1,choices=TIPOS_PESSOA_CHOICES,verbose_name='Tipo')
+
+    def __str__(self):
+            return self.nome
