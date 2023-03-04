@@ -1,11 +1,21 @@
 from django.db import models
 
 class Configuracoes(models.Model):
-    """
-    Model de configuração da pelada, podendo configurar informações globais 
-    que serão utilizadas em n funcionalidades no sistema.
-    """
+        """
+    Model que armazena as configurações da pelada, incluindo o nome da pelada, o horário em que ela ocorre, a mensalidade
+    para jogadores mensalistas e o saldo em caixa. Possui os seguintes atributos:
 
+    Atributos:
+        nome (str): Nome da pelada.
+        horario (Time): Horário em que a pelada ocorre.
+        mensalidade (Decimal): Valor da mensalidade para jogadores mensalistas.
+        saldo (Decimal): Saldo em caixa da pelada.
+
+    Métodos:
+        __str__(): Retorna o nome da pelada como uma string.
+
+    """
+        
     nome = models.TextField(max_length=50,verbose_name='Nome da pelada')
     horario = models.TimeField(verbose_name='Horário da pelada')
     mensalidade = models.DecimalField(max_digits=8, decimal_places=2,
@@ -45,6 +55,8 @@ class Jogador(Pessoa):
         pix (str, opcional): Chave Pix do jogador.
         tipo (int): Tipo de jogador, que pode ser 1 (avulso) ou 2 (mensalista).
 
+    Métodos:
+        __str__(): Retorna o nome do goleiro como uma string.
     """
 
     AVULSO = 1
@@ -56,5 +68,24 @@ class Jogador(Pessoa):
 
     tipo = models.IntegerField(default=1,choices=TIPOS_PESSOA_CHOICES,verbose_name='Tipo')
 
+    def __str__(self):
+            return self.nome
+
+class Goleiro(Pessoa):
+    """
+    Representa um goleiro, que é um tipo de jogador que tem a função de defender o gol. Herda da classe Pessoa e adiciona um
+    campo para o custo do goleiro. Possui os seguintes atributos:
+
+    Atributos:
+        nome (str): Nome completo do goleiro.
+        telefone (str, opcional): Número de telefone do goleiro.
+        pix (str, opcional): Chave Pix do goleiro.
+        custo (Decimal): Custo do goleiro, em reais.
+
+    Métodos:
+        __str__(): Retorna o nome do goleiro como uma string.
+    """
+    custo = models.DecimalField(max_digits=8, decimal_places=2)
+    
     def __str__(self):
             return self.nome
